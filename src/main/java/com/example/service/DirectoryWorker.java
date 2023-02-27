@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DirectoryWorker {
-    public List<FileModel> getList(String path) {
+    public static List<FileModel> getList(String path) {
         return Stream.of(new File(path).listFiles())
                 .map(file -> new FileModel(
                         file.getName(),

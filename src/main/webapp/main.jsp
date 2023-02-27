@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.util.List" %>
 <%@ page import="com.example.model.FileModel" %>
 <!doctype html>
 <html lang="en">
@@ -64,7 +63,7 @@
     <td><%= new java.text.SimpleDateFormat("dd/MM/yyyy, hh:mm:ss a").format(new Date(fileModel.getLastModified())) %></td>
   </tr>
 
-  <%}else{%>
+  <%} else {%>
 
   <tr>
     <td><img src="https://icon-library.com/images/png-file-icon/png-file-icon-6.jpg" style="width: 40px"/></td>
