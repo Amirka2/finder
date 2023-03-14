@@ -18,7 +18,7 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DirectoryWorker dw = new DirectoryWorker();
         String path = req.getParameter("path");
-        if (path.equals("")){
+        if (path == null || path.equals("")){
             path = "/";
         }
         String absolutePath = new File(path).getAbsolutePath();
