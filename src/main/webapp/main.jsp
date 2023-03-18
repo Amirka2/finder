@@ -2,6 +2,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="com.example.model.FileModel" %>
+<%@ page import="static java.util.Arrays.stream" %>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -39,6 +41,10 @@
 <%= new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()) %>
 <div class="path">
   <h1> Директория: ${path} </h1>
+  <p><%
+//    stream(request.getCookies()).filter((c) -> c.getName() == "login").limit(1);
+  %></p>
+  <a id='loginButton' href="/authorization">Log out</a>
 </div>
 <a style="display: inline-block; height: 30px; border: 1px solid black" href="./?path=${requestScope.path.substring(0, requestScope.path.lastIndexOf('/'))}"><img src="https://w7.pngwing.com/pngs/138/63/png-transparent-computer-icons-arrow-back-icon-angle-logo-symbol-thumbnail.png" style="height: 30px"/> Назад</a>
 <br>
@@ -74,5 +80,13 @@
   <%}
   }%>
 </table>
+<script>
+  let loginButton = document.getElementById('loginButton');
+  console.log("btn click");
+  loginButton.addEventListener('click', function () {
+      this.innerHTML =
+              (this.innerHTML === 'Log in') ? this.innerHTML = 'Log out' : this.innerHTML = 'Log in';
+  })
+</script>
 </body>
 </html>
