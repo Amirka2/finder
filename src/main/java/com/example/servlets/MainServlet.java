@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @WebServlet("/")
@@ -20,13 +22,14 @@ public class MainServlet extends HttpServlet {
         Cookie loginCookie = getCookie("login", req);
         boolean isCookieExists = loginCookie != null;
         if (!isCookieExists) {
-            req.getRequestDispatcher("main.jsp").forward(req, resp);
+            resp.sendRedirect("/authorization");
         }
 
         DirectoryWorker dw = new DirectoryWorker();
         String path = req.getParameter("path");
         if (path == null || path.equals("")){
-            path = "/";
+            // makeDir(loginCookie.getValue());
+            path = "/"; // + loginCookie.getValue();
         }
         String absolutePath = new File(path).getAbsolutePath();
         List<FileModel> content;
@@ -40,7 +43,7 @@ public class MainServlet extends HttpServlet {
     private Cookie getCookie(String cName,HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
         String cookieName = cName;
-        if(cookies !=null) {
+        if(cookies != null) {
             for(Cookie c: cookies) {
                 if(cookieName.equals(c.getName())) {
                     return c;
@@ -48,5 +51,11 @@ public class MainServlet extends HttpServlet {
             }
         }
         return null;
+    }
+    private void makeDir(String dirName) throws IOException {
+        File folder = new File("/" + dirName);
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
     }
 }
