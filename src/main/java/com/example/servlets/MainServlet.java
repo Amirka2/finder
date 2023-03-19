@@ -31,6 +31,9 @@ public class MainServlet extends HttpServlet {
 
         path = req.getParameter("path");
 
+        if (path != null && path.contains(loginCookie.getValue())) {
+            path = "/tmp" + path;
+        }
         if (path == null || "".equals(path)) {
             // makeDir(loginCookie.getValue());
             path = "/tmp/" + loginCookie.getValue() + "/1/2/3/4/5.txt";
@@ -38,13 +41,16 @@ public class MainServlet extends HttpServlet {
 
             path = "/tmp/" + loginCookie.getValue();
         }
+
         String absolutePath = new File(path).getAbsolutePath();
         List<FileModel> content;
         content = dw.getList(path);
 
+        String p = path.substring(4,path.length());
+
         resp.addCookie(loginCookie);
         req.setAttribute("content", content);
-        req.setAttribute("path", absolutePath);
+        req.setAttribute("path", path.substring(4,path.length()));
         req.getRequestDispatcher("main.jsp").forward(req, resp);
     }
     private Cookie getCookie(String cName,HttpServletRequest req) {
