@@ -2,6 +2,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="com.example.model.FileModel" %>
+<%@ page import="static java.util.Arrays.stream" %>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -39,6 +41,10 @@
 <%= new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()) %>
 <div class="path">
   <h1> Директория: ${path} </h1>
+  <p><%
+//    stream(request.getCookies()).filter((c) -> c.getName() == "login").limit(1);
+  %></p>
+  <a id="logoutBtn" href="/authorization">Log out</a>
 </div>
 <a style="display: inline-block; height: 30px; border: 1px solid black" href="./?path=${requestScope.path.substring(0, requestScope.path.lastIndexOf('/'))}"><img src="https://w7.pngwing.com/pngs/138/63/png-transparent-computer-icons-arrow-back-icon-angle-logo-symbol-thumbnail.png" style="height: 30px"/> Назад</a>
 <br>
@@ -74,5 +80,23 @@
   <%}
   }%>
 </table>
+<script>
+  function cookiesDelete() {
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i];
+      var eqPos = cookie.indexOf("=");
+      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+      document.cookie = name + '=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+  }
+  let btn = document.getElementById('logoutBtn');
+  btn.onclick = () => {
+    cookiesDelete();
+    console.log(document.cookie);
+    document.location.href = "http://127.0.0.1:8080/authorization"
+  }
+</script>
 </body>
 </html>
