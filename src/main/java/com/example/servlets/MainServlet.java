@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -25,11 +26,17 @@ public class MainServlet extends HttpServlet {
             resp.sendRedirect("/authorization");
         }
 
+        String path;
         DirectoryWorker dw = new DirectoryWorker();
-        String path = req.getParameter("path");
-        if (path == null || path.equals("")){
+
+        path = req.getParameter("path");
+
+        if (path == null || "".equals(path)) {
             // makeDir(loginCookie.getValue());
-            path = "/"; // + loginCookie.getValue();
+            path = "/tmp/" + loginCookie.getValue() + "/1/2/3/4/5.txt";
+            Files.createDirectories(Paths.get(path));
+
+            path = "/tmp/" + loginCookie.getValue();
         }
         String absolutePath = new File(path).getAbsolutePath();
         List<FileModel> content;
