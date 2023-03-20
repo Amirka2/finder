@@ -31,15 +31,14 @@ public class MainServlet extends HttpServlet {
 
         path = req.getParameter("path");
 
-        if (path != null && path.contains(loginCookie.getValue())) {
-            path = "/tmp" + path;
+        if (path != null) {
+            File fPath = new File(path);
+            path = "/tmp" + fPath.getCanonicalPath();
         }
-        if (path == null || "".equals(path)) {
-            path = "/tmp/" + loginCookie.getValue() + "/1/2/3/4/5.txt";
-            Files.createDirectories(Paths.get(path));
-
+        if (path == null || !path.contains(loginCookie.getValue()) || "".equals(path)) {
             path = "/tmp/" + loginCookie.getValue();
         }
+
         List<FileModel> content;
         content = dw.getList(path);
 
