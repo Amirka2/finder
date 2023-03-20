@@ -30,7 +30,6 @@ public class AuthServlet extends HttpServlet {
             resp.addCookie(password);
             if (req.getAttribute("email") != null) {
                 Cookie email = new Cookie("email", req.getParameter("email"));
-                email.setMaxAge(-1);
                 resp.addCookie(email);
                 resp.sendRedirect("/authorization");
             } else {

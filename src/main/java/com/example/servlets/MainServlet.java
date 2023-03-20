@@ -35,14 +35,11 @@ public class MainServlet extends HttpServlet {
             path = "/tmp" + path;
         }
         if (path == null || "".equals(path)) {
-            // makeDir(loginCookie.getValue());
             path = "/tmp/" + loginCookie.getValue() + "/1/2/3/4/5.txt";
             Files.createDirectories(Paths.get(path));
 
             path = "/tmp/" + loginCookie.getValue();
         }
-
-        String absolutePath = new File(path).getAbsolutePath();
         List<FileModel> content;
         content = dw.getList(path);
 
@@ -50,7 +47,7 @@ public class MainServlet extends HttpServlet {
 
         resp.addCookie(loginCookie);
         req.setAttribute("content", content);
-        req.setAttribute("path", path.substring(4,path.length()));
+        req.setAttribute("path", p);
         req.getRequestDispatcher("main.jsp").forward(req, resp);
     }
     private Cookie getCookie(String cName,HttpServletRequest req) {
@@ -64,11 +61,5 @@ public class MainServlet extends HttpServlet {
             }
         }
         return null;
-    }
-    private void makeDir(String dirName) throws IOException {
-        File folder = new File("/" + dirName);
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
     }
 }
