@@ -46,6 +46,7 @@ public class AuthServlet extends HttpServlet {
                 Cookie emailCookie = new Cookie("email", email);
                 User newUser = new User(login, password, email);
                 AuthService.addUser(newUser);
+                session.setAttribute("user", user);
 
                 resp.addCookie(emailCookie);
                 resp.sendRedirect("/authorization");
