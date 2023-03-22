@@ -82,6 +82,7 @@
 </table>
 <script>
   function cookiesDelete() {
+    let promise = fetch('/logout');
     var cookies = document.cookie.split(";");
     for (var i = 0; i < cookies.length; i++) {
       var cookie = cookies[i];
@@ -94,7 +95,6 @@
   let btn = document.getElementById('logoutBtn');
   btn.onclick = () => {
     cookiesDelete();
-    console.log(document.cookie);
     document.location.href = "http://127.0.0.1:8080/authorization"
   }
 </script>

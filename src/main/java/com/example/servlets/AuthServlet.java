@@ -1,11 +1,11 @@
 package com.example.servlets;
 
+import com.example.model.User;
+import com.example.service.AuthService;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -22,15 +22,32 @@ public class AuthServlet extends HttpServlet {
         String action = req.getParameter("action");
 
         if ("submit".equals(action)) {
-            Cookie login = new Cookie("login", req.getParameter("login"));
-            Cookie password = new Cookie("password", req.getParameter("password"));
-            login.setMaxAge(-1);
-            password.setMaxAge(-1);
-            resp.addCookie(login);
-            resp.addCookie(password);
-            if (req.getAttribute("email") != null) {
-                Cookie email = new Cookie("email", req.getParameter("email"));
-                resp.addCookie(email);
+            String login = req.getParameter("login");
+            String password = req.getParameter("password");
+
+            if (!AuthService.isUserExists(login, password)) {
+                resp.sendRedirect("/authorization");
+            }
+
+            User user = AuthService.getUser(login, password);
+            HttpSession session = req.getSession();
+            session.setAttribute("user", user);
+            AuthService.setUserActive(user);
+
+            Cookie loginCookie = new Cookie("login", login);
+            Cookie passwordCookie = new Cookie("password", password);
+
+            loginCookie.setMaxAge(-1);
+            passwordCookie.setMaxAge(-1);
+            resp.addCookie(loginCookie);
+            resp.addCookie(passwordCookie);
+            if (req.getParameter("email") != null) {
+                String email = req.getParameter("email");
+                Cookie emailCookie = new Cookie("email", email);
+                User newUser = new User(login, password, email);
+                AuthService.addUser(newUser);
+
+                resp.addCookie(emailCookie);
                 resp.sendRedirect("/authorization");
             } else {
                 resp.sendRedirect("/");
