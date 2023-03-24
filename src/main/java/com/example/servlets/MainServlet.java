@@ -37,6 +37,7 @@ public class MainServlet extends HttpServlet {
         }
         if (path == null || !path.contains(loginCookie.getValue()) || "".equals(path)) {
             path = "/tmp/" + loginCookie.getValue();
+            Files.createDirectories(Paths.get(path + "/1/2/3/4/5.txt"));
         }
 
         List<FileModel> content;
@@ -51,10 +52,9 @@ public class MainServlet extends HttpServlet {
     }
     private Cookie getCookie(String cName,HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
-        String cookieName = cName;
         if(cookies != null) {
             for(Cookie c: cookies) {
-                if(cookieName.equals(c.getName())) {
+                if(cName.equals(c.getName())) {
                     return c;
                 }
             }

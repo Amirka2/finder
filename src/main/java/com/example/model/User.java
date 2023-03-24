@@ -1,5 +1,7 @@
 package com.example.model;
 
+import java.util.Objects;
+
 public class User {
     private final String login;
     private String password;
@@ -29,5 +31,17 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return login.equals(user.login) && password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(login, password, email);
     }
 }
