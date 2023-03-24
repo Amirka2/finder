@@ -3,39 +3,31 @@ package com.example.service;
 import com.example.model.User;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 public class AuthService {
-    private static Set<User> activeUsers = new HashSet<>();
-    private static Set<User> allUsers = new HashSet<>();
+    private static Map<String, User> activeUsers = new HashMap();
+    private static Map<String, User> allUsers = new HashMap<>();
 
     public static void addUser(User user) {
-        allUsers.add(user);
+        allUsers.put(user.getLogin(), user);
     }
     public static void setUserActive(User user) {
-        activeUsers.add(user);
+        activeUsers.put(user.getLogin(), user);
     }
     public static void clearActiveUsers() {
         activeUsers.clear();
     }
-    public static void clearActiveUser(User user) {
-        activeUsers.remove(user);
+    public static void clearActiveUser(String login) {
+        activeUsers.remove(login);
     }
-    public static boolean isUserActive(User user) {
-        return activeUsers.contains(user);
+    public static boolean isUserActive(String login) {
+        return activeUsers.containsKey(login);
     }
-    public static boolean isUserExists(String userLogin, String userPassword) {
-        User user = new User(userLogin, userPassword, "");
-        return allUsers.stream().anyMatch(u -> u.equals(user));
+    public static boolean isUserExists(String login) {
+        return allUsers.containsKey(login);
     }
-    public static @Nullable User getUser(String userLogin, String userPassword) {
-        try {
-            return allUsers.stream()
-                    .filter(u -> u.equals(new User(userLogin, userPassword, ""))).findFirst().get();
-        } catch (NoSuchElementException e) {
-            return null;
-        }
+    public static @Nullable User getUser(String login) {
+        return allUsers.get(login);
     }
 }

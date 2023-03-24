@@ -24,35 +24,32 @@ public class AuthServlet extends HttpServlet {
         if ("submit".equals(action)) {
             String login = req.getParameter("login");
             String password = req.getParameter("password");
-
-            if (!AuthService.isUserExists(login, password)) {
-                resp.sendRedirect("/authorization");
-            }
-
-            User user = AuthService.getUser(login, password);
+            String email = req.getParameter("email");
             HttpSession session = req.getSession();
-            session.setAttribute("user", user);
-            AuthService.setUserActive(user);
 
-            Cookie loginCookie = new Cookie("login", login);
-            Cookie passwordCookie = new Cookie("password", password);
-
-            loginCookie.setMaxAge(-1);
-            passwordCookie.setMaxAge(-1);
-            resp.addCookie(loginCookie);
-            resp.addCookie(passwordCookie);
-            if (req.getParameter("email") != null) {
-                String email = req.getParameter("email");
+            if (!AuthService.isUserExists(login) && email != null) {
                 Cookie emailCookie = new Cookie("email", email);
                 User newUser = new User(login, password, email);
                 AuthService.addUser(newUser);
-                session.setAttribute("user", user);
+                session.setAttribute("user", newUser);
 
                 resp.addCookie(emailCookie);
                 resp.sendRedirect("/authorization");
-            } else {
+            } else if (AuthService.isUserExists(login)){
+                User user = AuthService.getUser(login);
+                session.setAttribute("user", user);
+                AuthService.setUserActive(user);
+
+                Cookie loginCookie = new Cookie("login", login);
+                Cookie passwordCookie = new Cookie("password", password);
+
+                loginCookie.setMaxAge(-1);
+                passwordCookie.setMaxAge(-1);
+                resp.addCookie(loginCookie);
+                resp.addCookie(passwordCookie);
                 resp.sendRedirect("/");
             }
+
         }
 
     }
