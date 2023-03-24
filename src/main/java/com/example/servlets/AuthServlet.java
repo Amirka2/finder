@@ -2,12 +2,15 @@ package com.example.servlets;
 
 import com.example.model.User;
 import com.example.service.AuthService;
+import com.example.service.UserDB;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 @WebServlet("/authorization")
 public class AuthServlet extends HttpServlet {
@@ -32,6 +35,7 @@ public class AuthServlet extends HttpServlet {
                 User newUser = new User(login, password, email);
                 AuthService.addUser(newUser);
                 session.setAttribute("user", newUser);
+                UserDB.insert(newUser);
 
                 resp.addCookie(emailCookie);
                 resp.sendRedirect("/authorization");
